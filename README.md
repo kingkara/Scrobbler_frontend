@@ -2,7 +2,11 @@
 Scrobbler from your Spotify application, which shows music history, creates statistics and shows lyrics to currently played track. Used API:
 
 Spotify: https://developer.spotify.com/
+
+
 APISEEDS: https://apiseeds.com/
+
+
 Backend for this project available at: https://github.com/kingkara/Scrobbler_backend
 
 DESCRIPTION:
