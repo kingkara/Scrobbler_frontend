@@ -16,5 +16,4 @@ public class SpotifyFullTrackDto {
 
     @JsonProperty("played_at")
     private String playedAt;
-
 }

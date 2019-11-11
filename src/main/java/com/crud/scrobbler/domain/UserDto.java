@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,22 +15,13 @@ import java.util.List;
 public class UserDto {
     @JsonProperty("id")
     private long id;
+
     @JsonProperty("username")
     private String username;
+
     @JsonProperty("email")
     private String email;
+
     @JsonProperty("spotifyId")
     private String spotifyId;
-    @JsonProperty("userArtistId")
-    private List<UsersArtist> userArtistId;
-    @JsonProperty("userTrackId")
-    private List<UsersTrack> userTrackId;
-    @JsonProperty("comments")
-    private List<Comment> comments;
-
-    public UserDto(String username, String email, String spotifyId) {
-        this.username = username;
-        this.email = email;
-        this.spotifyId = spotifyId;
-    }
 }

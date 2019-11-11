@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,10 +15,19 @@ import lombok.NoArgsConstructor;
 public class CommentDto {
     @JsonProperty("id")
     private long id;
+
     @JsonProperty("text")
     private String text;
-    @JsonProperty("user")
-    private User user;
-    @JsonProperty("track")
-    private Track track;
+
+    @JsonProperty("username")
+    private String userName;
+
+    @JsonProperty("trackTitle")
+    private String trackTitle;
+
+    public CommentDto(String text, String userName, String title) {
+        this.text = text;
+        this.userName = userName;
+        this.trackTitle = title;
+    }
 }

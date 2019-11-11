@@ -15,6 +15,5 @@ public class LyricsApiService {
     public LyricsDto getLyrics(String artistName, String title) {
         return restTemplate.getForObject("http://localhost:8088/v1/lyrics/" + artistName.replace(" ", "%20") +"/" +
                 title.replace(" ", "%20"), LyricsDto.class);
-
     }
 }

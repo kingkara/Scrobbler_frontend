@@ -1,30 +1,33 @@
 package com.crud.scrobbler.service;
 
-import com.crud.scrobbler.domain.Comment;
 import com.crud.scrobbler.domain.CommentDto;
-import com.crud.scrobbler.mapper.CommentsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 public class CommentsService {
     private RestTemplate restTemplate;
-    private CommentsMapper mapper;
 
     @Autowired
-    public CommentsService(RestTemplate restTemplate, CommentsMapper commentsMapper) {
+    public CommentsService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.mapper = commentsMapper;
     }
 
-    public CommentDto getComments(final long trackId) {
-        return restTemplate.getForObject("http://localhost:8088/v1/comments/" + trackId, CommentDto.class);
+    public List<CommentDto> getComments(final long trackId) {
+        CommentDto[] list = restTemplate.getForObject("http://localhost:8088/v1/comments/" + trackId, CommentDto[].class);
+        if (list != null) {
+            return Arrays.asList(list);
+        }
+        return new ArrayList<>();
     }
 
-    public CommentDto addComment(final Comment comment) {
-        CommentDto commentDto = mapper.mapToCommentDto(comment);
-        return restTemplate.postForObject("http://localhost:8088/v1/comments", commentDto, CommentDto.class);
+    public void addComment(final CommentDto commentDto) {
+        restTemplate.postForObject("http://localhost:8088/v1/comments", commentDto, CommentDto.class);
     }
 
     public void editComment(final CommentDto commentDto) {

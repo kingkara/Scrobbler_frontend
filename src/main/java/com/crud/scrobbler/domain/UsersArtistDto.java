@@ -13,14 +13,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UsersArtistDto {
-    @JsonProperty("id")
-    private UsersArtist.UsersArtistIdBuilder id;
     @JsonProperty("count")
     private long count;
+
     @JsonProperty("lastPlayedTime")
     private String lastPlayedTime;
-    @JsonProperty("user")
-    private User user;
-    @JsonProperty("artist")
-    private Artist artist;
+
+    @JsonProperty("artistName")
+    private String name;
 }

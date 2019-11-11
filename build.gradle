@@ -18,7 +18,6 @@ repositories {
 dependencies {
     implementation 'com.vaadin:vaadin-bom:13.0.3'
     implementation 'com.vaadin:vaadin-spring-boot-starter:13.0.3'
-    compile group: 'com.vaadin', name: 'vaadin-app-layout-flow', version: '1.0.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

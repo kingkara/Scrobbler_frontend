@@ -24,14 +24,6 @@ public class UsersTracksService {
         return new ArrayList<>();
     }
 
-    public List<UsersTrackDto> getFavouriteTracks(final long userId) {
-        UsersTrackDto[] list = restTemplate.getForObject("http://localhost:8088/v1/usersTracks/fav/" + userId, UsersTrackDto[].class);
-        if (list != null) {
-            return Arrays.asList(list);
-        }
-        return new ArrayList<>();
-    }
-
     public void changeFavouriteStatus(final long userId, final long trackId) {
         restTemplate.put("http://localhost:8088/v1/usersTracks/" + userId + "/" + trackId, UsersTrackDto[].class);
     }
@@ -45,7 +37,7 @@ public class UsersTracksService {
     }
 
     public void deleteTrack(final long userId, final long trackId) {
-        restTemplate.delete("http://localhost:8088/v1/usersTracks/top/" + userId + "/" + trackId);
+        restTemplate.delete("http://localhost:8088/v1/usersTracks/" + userId + "/" + trackId);
     }
 
 }

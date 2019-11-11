@@ -1,7 +1,6 @@
 package com.crud.scrobbler.service;
 
 import com.crud.scrobbler.domain.UsersArtistDto;
-import com.crud.scrobbler.domain.UsersTrackDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

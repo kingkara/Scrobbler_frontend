@@ -15,7 +15,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -33,7 +32,6 @@ public class CreateUserView extends VerticalLayout {
     private Button save = new Button("Save");
 
     public CreateUserView(@Autowired UsersService usersService) {
-        setId("form-view");
         VerticalLayout wrapper = createWrapper();
         setSizeFull();
         setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
@@ -76,7 +74,6 @@ public class CreateUserView extends VerticalLayout {
     private VerticalLayout createWrapper() {
         VerticalLayout wrapper = new VerticalLayout();
         setSizeFull();
-        wrapper.setId("wrapper");
         wrapper.setSpacing(false);
         return wrapper;
     }
@@ -89,9 +86,8 @@ public class CreateUserView extends VerticalLayout {
         addFormItem(wrapper, formLayout, spotifyId, "Your spotify ID");
     }
 
-    private void createButtonLayout(VerticalLayout wrapper) {
+   public void createButtonLayout(VerticalLayout wrapper) {
         HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.addClassName("button-layout");
         buttonLayout.setWidthFull();
         buttonLayout
                 .setJustifyContentMode(FlexComponent.JustifyContentMode.END);

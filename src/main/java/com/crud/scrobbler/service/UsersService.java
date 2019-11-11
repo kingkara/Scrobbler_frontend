@@ -1,19 +1,15 @@
 package com.crud.scrobbler.service;
 
-import com.crud.scrobbler.domain.User;
 import com.crud.scrobbler.domain.UserDto;
-import com.crud.scrobbler.mapper.UsersMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class UsersService {
     private RestTemplate restTemplate;
-    private UsersMapper mapper;
 
-    public UsersService(RestTemplate restTemplate, UsersMapper mapper) {
+    public UsersService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.mapper = mapper;
     }
 
     public UserDto getUser(final long id) {

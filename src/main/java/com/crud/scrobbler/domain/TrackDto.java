@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,12 +13,10 @@ import java.util.List;
 public class TrackDto {
     @JsonProperty("id")
     private long id;
+
     @JsonProperty("title")
     private String title;
-    @JsonProperty("artist")
-    private Artist artist;
-    @JsonProperty("usersTracks")
-    private List<UsersTrack> usersTracks;
-    @JsonProperty("comment")
-    private List<Comment> comment;
+
+    @JsonProperty("artistName")
+    private String artistName;
 }

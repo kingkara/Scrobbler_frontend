@@ -4,10 +4,14 @@ import com.crud.scrobbler.domain.lyricsApi.LyricsDto;
 import com.crud.scrobbler.domain.spotify.SpotifyCurrentlyPlayedDto;
 import com.crud.scrobbler.service.LyricsApiService;
 import com.crud.scrobbler.service.SpotifyService;
-import com.crud.scrobbler.view.artists.ArtistsSearch;
-import com.crud.scrobbler.view.tracks.TracksSearch;
+import com.crud.scrobbler.view.artists.ArtistsSearchView;
+import com.crud.scrobbler.view.tracks.TracksSearchView;
 import com.crud.scrobbler.view.user.CreateUserView;
+import com.crud.scrobbler.view.user.DeleteUserView;
+import com.crud.scrobbler.view.user.EditUserView;
+import com.crud.scrobbler.view.usersLibrary.UsersArtistsView;
 import com.crud.scrobbler.view.usersLibrary.UsersLibraryView;
+import com.crud.scrobbler.view.usersLibrary.UsersTracksView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
@@ -76,10 +80,15 @@ public class MainView extends VerticalLayout implements RouterLayout {
         // MENU
         Tab actionButton1 = new Tab(VaadinIcon.HOME.create(), new RouterLink("Home", MainView.class));
         Tab actionButton2 = new Tab(VaadinIcon.PLUS.create(), new RouterLink("Create User", CreateUserView.class));
-        Tab actionButton3 = new Tab(VaadinIcon.USERS.create(), new RouterLink("Users Library", UsersLibraryView.class));
-        Tab actionButton4 = new Tab(VaadinIcon.SEARCH.create(), new RouterLink("Search Tracks", TracksSearch.class));
-        Tab actionButton5 = new Tab(VaadinIcon.SEARCH.create(), new RouterLink("Search Artist", ArtistsSearch.class));
-        Tabs buttonBar = new Tabs(actionButton1, actionButton2, actionButton3, actionButton4, actionButton5);
+        Tab actionButton3 = new Tab(VaadinIcon.TOOLS.create(), new RouterLink("Edit User", EditUserView.class));
+        Tab actionButton4 = new Tab(VaadinIcon.TRASH.create(), new RouterLink("Delete User", DeleteUserView.class));
+        Tab actionButton5 = new Tab(VaadinIcon.USERS.create(), new RouterLink("Users Library", UsersLibraryView.class));
+        Tab actionButton6 = new Tab(VaadinIcon.MUSIC.create(), new RouterLink("Your Tracks", UsersTracksView.class));
+        Tab actionButton7 = new Tab(VaadinIcon.MICROPHONE.create(), new RouterLink("Your Artists", UsersArtistsView.class));
+        Tab actionButton8 = new Tab(VaadinIcon.SEARCH.create(), new RouterLink("Search Tracks", TracksSearchView.class));
+        Tab actionButton9 = new Tab(VaadinIcon.SEARCH.create(), new RouterLink("Search Artist", ArtistsSearchView.class));
+        Tabs buttonBar = new Tabs(actionButton1, actionButton2, actionButton3, actionButton4, actionButton5, actionButton6,
+                actionButton7, actionButton8, actionButton9);
 
         HorizontalLayout menu = new HorizontalLayout(buttonBar);
         menu.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -88,12 +97,15 @@ public class MainView extends VerticalLayout implements RouterLayout {
         Map<Tab, String> map = new HashMap<>();
         map.put(actionButton1, "home");
         map.put(actionButton2, "createUser");
-        map.put(actionButton3, "usersLibrary");
-        map.put(actionButton4, "tracksSearch");
-        map.put(actionButton5, "artistsSearch");
+        map.put(actionButton3, "editUser");
+        map.put(actionButton4, "deleteUser");
+        map.put(actionButton5, "usersLibrary");
+        map.put(actionButton6, "usersTracks");
+        map.put(actionButton7, "usersArtists");
+        map.put(actionButton8, "tracksSearch");
+        map.put(actionButton9, "artistsSearch");
         VerticalLayout finalCurrentTrack = currentTrack;
         buttonBar.addSelectedChangeListener(e ->
-
         {
             removeAll();
             add(header, menu);
@@ -108,10 +120,9 @@ public class MainView extends VerticalLayout implements RouterLayout {
         setSpacing(false);
         setPadding(false);
         add(header, menu, currentTrack);
-
     }
 
-    private Component createTestDisplay(Component element) {
+    public static Component createTestDisplay(Component element) {
         Span component = new Span();
         FlexLayout flexLayout = new FlexLayout(component);
         flexLayout.add(element);
