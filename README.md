@@ -14,7 +14,7 @@ DESCRIPTION:
 
 2. Backend project runs on http://localhost:8088 (if you need to change it, you can do it in application.properties file).
 
-3. Frontend runs on http://localhost:7077/home (again if you need to change, do it in application.properties file).
+3. Frontend runs on http://localhost:7077 (again if you need to change, do it in application.properties file).
 
 4. To run application in full functionality you need to start backend project first, after its initiation you can run frontend project and
   go to http://localhost:7077/home where you will see main view of the application.
