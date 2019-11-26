@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @HtmlImport("styles/shared-styles.html")
-@Route(value = "home")
+@Route(value = "")
 @Theme(value = Lumo.class)
 public class MainView extends VerticalLayout implements RouterLayout {
 
@@ -55,8 +55,10 @@ public class MainView extends VerticalLayout implements RouterLayout {
                 .set("font-weight", "600");
         VerticalLayout currentTrack = new VerticalLayout(createTestDisplay(new Text("Sorry you're not listening to anything right now.")));
         currentTrack.setSizeFull();
-        SpotifyCurrentlyPlayedDto currentlyPlayedDto = spotifyService.getCurrentPlaying();
-        if (currentlyPlayedDto != null) {
+        try {
+            SpotifyCurrentlyPlayedDto currentlyPlayedDto = spotifyService.getCurrentPlaying();
+
+        if (currentlyPlayedDto.getTitle() != null) {
             String name = currentlyPlayedDto.getArtistDtos().get(0).getName();
             Label formatedName = new Label(name);
             formatedName.getStyle().set("font-size", "15px")
@@ -76,6 +78,7 @@ public class MainView extends VerticalLayout implements RouterLayout {
             currentTrack = new VerticalLayout(createTestDisplay(title2), createTestDisplay(formatedName),
                     createTestDisplay(formatedTitle), createTestDisplay(formatedlyrics));
         }
+        } catch (Exception ignored){}
 
         // MENU
         Tab actionButton1 = new Tab(VaadinIcon.HOME.create(), new RouterLink("Home", MainView.class));
@@ -95,7 +98,7 @@ public class MainView extends VerticalLayout implements RouterLayout {
         menu.setWidth("100%");
 
         Map<Tab, String> map = new HashMap<>();
-        map.put(actionButton1, "home");
+        map.put(actionButton1, "");
         map.put(actionButton2, "createUser");
         map.put(actionButton3, "editUser");
         map.put(actionButton4, "deleteUser");
@@ -110,7 +113,7 @@ public class MainView extends VerticalLayout implements RouterLayout {
             removeAll();
             add(header, menu);
             UI.getCurrent().navigate(map.get(e.getSource().getSelectedTab()));
-            if (map.get(e.getSource().getSelectedTab()).equals("home")) {
+            if (map.get(e.getSource().getSelectedTab()).equals("")) {
                 add(finalCurrentTrack);
             }
         });

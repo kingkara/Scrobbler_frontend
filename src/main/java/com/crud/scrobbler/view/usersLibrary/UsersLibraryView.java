@@ -48,58 +48,63 @@ public class UsersLibraryView extends Div {
                 .set("font-weight", "400");
         Component titleComponent = createTestDisplay(title2);
 
-        List<SpotifyFullTrackDto> spotifyFullTrackDtos = spotifyService.getPlayback();
-        List<SpotifyFullTrackDto> subList = spotifyFullTrackDtos.subList(0, 10);
-        Grid<SpotifyFullTrackDto> trackDtoGrid = new Grid<>();
-        trackDtoGrid.setItems(subList);
+        try {
 
-        trackDtoGrid.addColumn(SpotifyFullTrackDto -> SpotifyFullTrackDto.getSpotifyTrackDto().getTitle()).setHeader("Title")
-                .setResizable(true).setTextAlign(ColumnTextAlign.CENTER);
-        trackDtoGrid.addColumn(SpotifyFullTrackDto -> SpotifyFullTrackDto.getSpotifyTrackDto().getSpotifyArtistDto()
-                .get(0).getName()).setHeader("Artist").setResizable(true).setTextAlign(ColumnTextAlign.CENTER);
-        trackDtoGrid.addColumn(SpotifyFullTrackDto -> Date.from(Instant.parse(SpotifyFullTrackDto.getPlayedAt())))
-                .setHeader("Played at").setResizable(true).setTextAlign(ColumnTextAlign.CENTER);
+            List<SpotifyFullTrackDto> spotifyFullTrackDtos = spotifyService.getPlayback();
+            List<SpotifyFullTrackDto> subList = spotifyFullTrackDtos.subList(0, 10);
+            Grid<SpotifyFullTrackDto> trackDtoGrid = new Grid<>();
+            trackDtoGrid.setItems(subList);
 
-        trackDtoGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+            trackDtoGrid.addColumn(SpotifyFullTrackDto -> SpotifyFullTrackDto.getSpotifyTrackDto().getTitle()).setHeader("Title")
+                    .setResizable(true).setTextAlign(ColumnTextAlign.CENTER);
+            trackDtoGrid.addColumn(SpotifyFullTrackDto -> SpotifyFullTrackDto.getSpotifyTrackDto().getSpotifyArtistDto()
+                    .get(0).getName()).setHeader("Artist").setResizable(true).setTextAlign(ColumnTextAlign.CENTER);
+            trackDtoGrid.addColumn(SpotifyFullTrackDto -> Date.from(Instant.parse(SpotifyFullTrackDto.getPlayedAt())))
+                    .setHeader("Played at").setResizable(true).setTextAlign(ColumnTextAlign.CENTER);
 
-        VerticalLayout lastlyPLayed = new VerticalLayout();
-        lastlyPLayed.add(titleComponent, trackDtoGrid);
-        lastlyPLayed.setSpacing(true);
+            trackDtoGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
-        //TOP TRACKS AND ARTISTS
-        Label title3 = new Label("Top played tracks");
-        title3.getStyle().set("font-size", "20px")
-                .set("font-weight", "400");
-        Component title3Component = createTestDisplay(title3);
+            VerticalLayout lastlyPLayed = new VerticalLayout();
+            lastlyPLayed.add(titleComponent, trackDtoGrid);
+            lastlyPLayed.setSpacing(true);
 
-        Grid<UsersTrackDto> usersTrackDtoGrid = new Grid<>();
-        usersTrackDtoGrid.addColumn(UsersTrackDto::getTitle).setHeader("Title").setTextAlign(ColumnTextAlign.CENTER);
-        usersTrackDtoGrid.addColumn(UsersTrackDto::getArtistName).setHeader("Artist").setTextAlign(ColumnTextAlign.CENTER);
-        usersTrackDtoGrid.addColumn(UsersTrackDto::getCount).setHeader("Count").setTextAlign(ColumnTextAlign.CENTER);
 
-        usersTrackDtoGrid.setItems(usersTracksService.getTopUsersTracks(123123));
-        usersTrackDtoGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+            //TOP TRACKS AND ARTISTS
+            Label title3 = new Label("Top played tracks");
+            title3.getStyle().set("font-size", "20px")
+                    .set("font-weight", "400");
+            Component title3Component = createTestDisplay(title3);
 
-        Label title4 = new Label("Top played artists");
-        title4.getStyle().set("font-size", "20px")
-                .set("font-weight", "400");
-        Component title4Component = createTestDisplay(title4);
+            Grid<UsersTrackDto> usersTrackDtoGrid = new Grid<>();
+            usersTrackDtoGrid.addColumn(UsersTrackDto::getTitle).setHeader("Title").setTextAlign(ColumnTextAlign.CENTER);
+            usersTrackDtoGrid.addColumn(UsersTrackDto::getArtistName).setHeader("Artist").setTextAlign(ColumnTextAlign.CENTER);
+            usersTrackDtoGrid.addColumn(UsersTrackDto::getCount).setHeader("Count").setTextAlign(ColumnTextAlign.CENTER);
 
-        Grid<UsersArtistDto> usersArtistDtoGrid = new Grid<>();
-        usersArtistDtoGrid.addColumn(UsersArtistDto::getName).setHeader("Artist Name").setTextAlign(ColumnTextAlign.CENTER);
-        usersArtistDtoGrid.addColumn(UsersArtistDto::getCount).setHeader("Count").setTextAlign(ColumnTextAlign.CENTER);
+            usersTrackDtoGrid.setItems(usersTracksService.getTopUsersTracks(123123));
+            usersTrackDtoGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
-        usersArtistDtoGrid.setItems(usersArtistsService.getTopArtists(123123));
-        usersArtistDtoGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+            Label title4 = new Label("Top played artists");
+            title4.getStyle().set("font-size", "20px")
+                    .set("font-weight", "400");
+            Component title4Component = createTestDisplay(title4);
 
-        VerticalLayout tops = new VerticalLayout();
-        tops.add(title3Component, usersTrackDtoGrid, title4Component, usersArtistDtoGrid);
+            Grid<UsersArtistDto> usersArtistDtoGrid = new Grid<>();
+            usersArtistDtoGrid.addColumn(UsersArtistDto::getName).setHeader("Artist Name").setTextAlign(ColumnTextAlign.CENTER);
+            usersArtistDtoGrid.addColumn(UsersArtistDto::getCount).setHeader("Count").setTextAlign(ColumnTextAlign.CENTER);
 
-        //VIEW
-        SplitLayout splitLayout = new SplitLayout();
-        splitLayout.setSizeFull();
-        splitLayout.addToPrimary(lastlyPLayed);
-        splitLayout.addToSecondary(tops);
-        add(header, splitLayout);
+            usersArtistDtoGrid.setItems(usersArtistsService.getTopArtists(123123));
+            usersArtistDtoGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+
+            VerticalLayout tops = new VerticalLayout();
+            tops.add(title3Component, usersTrackDtoGrid, title4Component, usersArtistDtoGrid);
+
+            //VIEW
+            SplitLayout splitLayout = new SplitLayout();
+            splitLayout.setSizeFull();
+            splitLayout.addToPrimary(lastlyPLayed);
+            splitLayout.addToSecondary(tops);
+            add(header, splitLayout);
+        } catch (Exception ignore) {
+        }
     }
 }

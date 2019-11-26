@@ -29,30 +29,33 @@ public class ArtistsSearchView extends Div {
                 new Label("Artist List"),
                 new Label("Artists track - click artist to see its tracks"));
 
-        //SEARCH
-        filter.setPlaceholder("Filter by title");
-        filter.setClearButtonVisible(true);
-        filter.setValueChangeMode(ValueChangeMode.EAGER);
-        filter.addValueChangeListener(e -> artistGrid.setItems(artistsService.findByName(filter.getValue())));
+        try {
+            //SEARCH
+            filter.setPlaceholder("Filter by title");
+            filter.setClearButtonVisible(true);
+            filter.setValueChangeMode(ValueChangeMode.EAGER);
+            filter.addValueChangeListener(e -> artistGrid.setItems(artistsService.findByName(filter.getValue())));
 
-        //ARTISTS LIST
-        artistGrid.addColumn(ArtistDto::getName).setHeader("Artist name").setTextAlign(ColumnTextAlign.CENTER);
-        artistGrid.setItems(artistsService.getArtists());
-        artistGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+            //ARTISTS LIST
+            artistGrid.addColumn(ArtistDto::getName).setHeader("Artist name").setTextAlign(ColumnTextAlign.CENTER);
+            artistGrid.setItems(artistsService.getArtists());
+            artistGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
-        layout.setSplitterPosition(50);
-        layout.addToPrimary(filter, artistGrid);
+            layout.setSplitterPosition(50);
+            layout.addToPrimary(filter, artistGrid);
 
-        //TRACKS DISPLAY
-        artistGrid.asSingleSelect().addValueChangeListener(event -> {
-            Grid<TrackDto> trackDtoGrid = new TreeGrid<>();
-            trackDtoGrid.addColumn(TrackDto::getTitle).setHeader("Title").setTextAlign(ColumnTextAlign.CENTER);
-            System.out.println(tracksService.findByArtistName(event.getValue().getName()).size());
-            trackDtoGrid.setItems(tracksService.findByArtistName(event.getValue().getName()));
-            layout.addToSecondary(trackDtoGrid);
-        });
+            //TRACKS DISPLAY
+            artistGrid.asSingleSelect().addValueChangeListener(event -> {
+                Grid<TrackDto> trackDtoGrid = new TreeGrid<>();
+                trackDtoGrid.addColumn(TrackDto::getTitle).setHeader("Title").setTextAlign(ColumnTextAlign.CENTER);
+                System.out.println(tracksService.findByArtistName(event.getValue().getName()).size());
+                trackDtoGrid.setItems(tracksService.findByArtistName(event.getValue().getName()));
+                layout.addToSecondary(trackDtoGrid);
+            });
 
-        setSizeFull();
-        add(layout);
+            setSizeFull();
+            add(layout);
+        } catch (Exception ignore) {
+        }
     }
 }

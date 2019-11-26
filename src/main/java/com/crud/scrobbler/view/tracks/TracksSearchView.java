@@ -38,114 +38,117 @@ public class TracksSearchView extends Div {
         SplitLayout globalLayot = new SplitLayout(new Label("Tracks List"),
                 new Label("Tracks comments - click track to see comments"));
 
-        //TRACKS LIST SEARCH
-        filter.setPlaceholder("Filter by title");
-        filter.setClearButtonVisible(true);
-        filter.setValueChangeMode(ValueChangeMode.EAGER);
-        filter.addValueChangeListener(e -> trackDtoGrid.setItems(tracksService.findByTitle(filter.getValue())));
+        try {
+            //TRACKS LIST SEARCH
+            filter.setPlaceholder("Filter by title");
+            filter.setClearButtonVisible(true);
+            filter.setValueChangeMode(ValueChangeMode.EAGER);
+            filter.addValueChangeListener(e -> trackDtoGrid.setItems(tracksService.findByTitle(filter.getValue())));
 
-        //TRACKS LIST GRID
-        trackDtoGrid.addColumn(TrackDto::getTitle).setHeader("Title").setTextAlign(ColumnTextAlign.CENTER);
-        trackDtoGrid.addColumn(TrackDto::getArtistName).setHeader("Artist").setTextAlign(ColumnTextAlign.CENTER);
+            //TRACKS LIST GRID
+            trackDtoGrid.addColumn(TrackDto::getTitle).setHeader("Title").setTextAlign(ColumnTextAlign.CENTER);
+            trackDtoGrid.addColumn(TrackDto::getArtistName).setHeader("Artist").setTextAlign(ColumnTextAlign.CENTER);
 
-        trackDtoGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+            trackDtoGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
-        List<TrackDto> trackDtos = tracksService.getTracks();
-        trackDtoGrid.setItems(trackDtos);
+            List<TrackDto> trackDtos = tracksService.getTracks();
+            trackDtoGrid.setItems(trackDtos);
 
-        //COMMENTS LIST
-        trackDtoGrid.asSingleSelect().addValueChangeListener(event -> {
-            globalLayot.removeAll();
-            globalLayot.addToPrimary(filter, trackDtoGrid);
-            TextField content = new TextField("Add new comment");
-            Grid<CommentDto> commentDtoGrid = new Grid<>();
-            Binder<CommentDto> binder = new Binder<>(CommentDto.class);
-            Editor<CommentDto> editor = commentDtoGrid.getEditor();
-            editor.setBinder(binder);
-            editor.setBuffered(true);
+            //COMMENTS LIST
+            trackDtoGrid.asSingleSelect().addValueChangeListener(event -> {
+                globalLayot.removeAll();
+                globalLayot.addToPrimary(filter, trackDtoGrid);
+                TextField content = new TextField("Add new comment");
+                Grid<CommentDto> commentDtoGrid = new Grid<>();
+                Binder<CommentDto> binder = new Binder<>(CommentDto.class);
+                Editor<CommentDto> editor = commentDtoGrid.getEditor();
+                editor.setBinder(binder);
+                editor.setBuffered(true);
 
-            Button cancel = new Button("Cancel");
-            Button save = new Button("Save");
+                Button cancel = new Button("Cancel");
+                Button save = new Button("Save");
 
-            Collection<Button> editButtons = Collections
-                    .newSetFromMap(new WeakHashMap<>());
+                Collection<Button> editButtons = Collections
+                        .newSetFromMap(new WeakHashMap<>());
 
-            commentDtoGrid.addColumn(CommentDto::getUserName).setHeader("Username").setTextAlign(ColumnTextAlign.CENTER);
-            Grid.Column<CommentDto> contentColumn = commentDtoGrid.addColumn(CommentDto::getText).setHeader("Content").
-                    setTextAlign(ColumnTextAlign.CENTER);
-            TextField contentField = new TextField();
-            binder.forField(contentField).asRequired("Your comment must have body").bind("text");
-            contentColumn.setEditorComponent(contentField);
-            Grid.Column<CommentDto> editorColumn = commentDtoGrid.addComponentColumn(comment -> {
-                Button edit = new Button("Edit");
-                edit.addClickListener(e -> {
-                    editor.editItem(comment);
-                    content.focus();
-                });
-                edit.setEnabled(!editor.isOpen());
-                editButtons.add(edit);
-                return edit;
-            });
-
-            commentDtoGrid.addComponentColumn(commentDto -> {
-                Button button = new Button("Remove");
-                button.addClickListener(click -> {
-                    commentsService.deleteComment(commentDto.getId());
-                    List<CommentDto> update = commentsService.getComments(tracksService.getTrack(event.getValue().getTitle()).getId());
-                    commentDtoGrid.setItems(update);
-                });
-                button.setIcon(VaadinIcon.TRASH.create());
-                return button;
-            });
-
-            editor.addOpenListener(e -> editButtons
-                    .forEach(button -> button.setEnabled(!editor.isOpen())));
-            editor.addCloseListener(e -> editButtons
-                    .forEach(button -> button.setEnabled(!editor.isOpen())));
-
-            Button saveEdit = new Button("Save", e -> editor.save());
-            save.addClassName("save");
-
-            Button cancelEdit = new Button("Cancel", e -> editor.cancel());
-            cancel.addClassName("cancel");
-
-            commentDtoGrid.getElement().addEventListener("keyup", event2 -> editor.cancel())
-                    .setFilter("event.key === 'Escape' || event.key === 'Esc'");
-
-            Div buttons = new Div(saveEdit, cancelEdit);
-            editorColumn.setEditorComponent(buttons);
-
-            editor.addSaveListener(
-                    event3 -> {
-                        CommentDto commentToUpdate = new CommentDto(event3.getItem().getId(), event3.getItem().getText(),
-                                event3.getItem().getUserName(), event3.getItem().getTrackTitle());
-                        commentsService.editComment(commentToUpdate);
+                commentDtoGrid.addColumn(CommentDto::getUserName).setHeader("Username").setTextAlign(ColumnTextAlign.CENTER);
+                Grid.Column<CommentDto> contentColumn = commentDtoGrid.addColumn(CommentDto::getText).setHeader("Content").
+                        setTextAlign(ColumnTextAlign.CENTER);
+                TextField contentField = new TextField();
+                binder.forField(contentField).asRequired("Your comment must have body").bind("text");
+                contentColumn.setEditorComponent(contentField);
+                Grid.Column<CommentDto> editorColumn = commentDtoGrid.addComponentColumn(comment -> {
+                    Button edit = new Button("Edit");
+                    edit.addClickListener(e -> {
+                        editor.editItem(comment);
+                        content.focus();
                     });
+                    edit.setEnabled(!editor.isOpen());
+                    editButtons.add(edit);
+                    return edit;
+                });
 
-            commentDtoGrid.setItems(commentsService.getComments(event.getValue().getId()));
+                commentDtoGrid.addComponentColumn(commentDto -> {
+                    Button button = new Button("Remove");
+                    button.addClickListener(click -> {
+                        commentsService.deleteComment(commentDto.getId());
+                        List<CommentDto> update = commentsService.getComments(tracksService.getTrack(event.getValue().getTitle()).getId());
+                        commentDtoGrid.setItems(update);
+                    });
+                    button.setIcon(VaadinIcon.TRASH.create());
+                    return button;
+                });
 
-            Binder<CommentDto> binderValidate = new BeanValidationBinder<>(CommentDto.class);
-            binderValidate.forField(content).asRequired("Your comment must have body").bind("text");
-            binderValidate.setBean(new CommentDto());
+                editor.addOpenListener(e -> editButtons
+                        .forEach(button -> button.setEnabled(!editor.isOpen())));
+                editor.addCloseListener(e -> editButtons
+                        .forEach(button -> button.setEnabled(!editor.isOpen())));
 
-            cancel.addClickListener(e -> binderValidate.readBean(null));
-            save.addClickListener(e -> {
-                binderValidate.validate();
-                if (binderValidate.isValid()) {
-                    CommentDto commentToAdd = new CommentDto(binderValidate.getBean().getText(), usersService.getUser(123123).getUsername(),
-                            event.getValue().getTitle());
-                    Notification.show("Dodano komenatrz!");
-                    commentsService.addComment(commentToAdd);
-                    commentDtoGrid.setItems(commentsService.getComments(event.getValue().getId()));
-                } else {
-                    Notification.show("Nieprawidłowa zawartość");
-                }
+                Button saveEdit = new Button("Save", e -> editor.save());
+                save.addClassName("save");
+
+                Button cancelEdit = new Button("Cancel", e -> editor.cancel());
+                cancel.addClassName("cancel");
+
+                commentDtoGrid.getElement().addEventListener("keyup", event2 -> editor.cancel())
+                        .setFilter("event.key === 'Escape' || event.key === 'Esc'");
+
+                Div buttons = new Div(saveEdit, cancelEdit);
+                editorColumn.setEditorComponent(buttons);
+
+                editor.addSaveListener(
+                        event3 -> {
+                            CommentDto commentToUpdate = new CommentDto(event3.getItem().getId(), event3.getItem().getText(),
+                                    event3.getItem().getUserName(), event3.getItem().getTrackTitle());
+                            commentsService.editComment(commentToUpdate);
+                        });
+
+                commentDtoGrid.setItems(commentsService.getComments(event.getValue().getId()));
+
+                Binder<CommentDto> binderValidate = new BeanValidationBinder<>(CommentDto.class);
+                binderValidate.forField(content).asRequired("Your comment must have body").bind("text");
+                binderValidate.setBean(new CommentDto());
+
+                cancel.addClickListener(e -> binderValidate.readBean(null));
+                save.addClickListener(e -> {
+                    binderValidate.validate();
+                    if (binderValidate.isValid()) {
+                        CommentDto commentToAdd = new CommentDto(binderValidate.getBean().getText(), usersService.getUser(123123).getUsername(),
+                                event.getValue().getTitle());
+                        Notification.show("Dodano komenatrz!");
+                        commentsService.addComment(commentToAdd);
+                        commentDtoGrid.setItems(commentsService.getComments(event.getValue().getId()));
+                    } else {
+                        Notification.show("Nieprawidłowa zawartość");
+                    }
+                });
+                globalLayot.addToSecondary(content, cancel, save, commentDtoGrid);
             });
-            globalLayot.addToSecondary(content, cancel, save, commentDtoGrid);
-        });
 
-        setSizeFull();
-        globalLayot.addToPrimary(filter, trackDtoGrid);
-        add(globalLayot);
+            setSizeFull();
+            globalLayot.addToPrimary(filter, trackDtoGrid);
+            add(globalLayot);
+        } catch (Exception ignore) {
+        }
     }
 }

@@ -19,37 +19,40 @@ import java.util.List;
 public class UsersTracksView extends Div {
     public UsersTracksView(@Autowired UsersTracksService usersTracksService, @Autowired TracksService tracksService) {
         setSizeFull();
-        List<UsersTrackDto> usersTrackDtos = usersTracksService.getUsersTracks(123123);
+        try {
+            List<UsersTrackDto> usersTrackDtos = usersTracksService.getUsersTracks(123123);
 
-        Grid<UsersTrackDto> usersTrackDtoGrid = new Grid<>();
-        usersTrackDtoGrid.addColumn(UsersTrackDto::getTitle).setHeader("Title").setTextAlign(ColumnTextAlign.CENTER);
-        usersTrackDtoGrid.addColumn(UsersTrackDto::getArtistName).setHeader("Artist").setTextAlign(ColumnTextAlign.CENTER);
-        usersTrackDtoGrid.addColumn(UsersTrackDto::getCount).setHeader("Count").setTextAlign(ColumnTextAlign.CENTER).setSortProperty("count");
-        usersTrackDtoGrid.addColumn(UsersTrackDto::isFavouriteStatus).setHeader("Favourite status");
-        usersTrackDtoGrid.addComponentColumn(item -> {
-            Button button = new Button("Change status");
-            button.addClickListener(click -> {
-                usersTracksService.changeFavouriteStatus(123123, tracksService.getTrack(item.getTitle()).getId());
-                List<UsersTrackDto> updateFav = usersTracksService.getUsersTracks(123123);
-                usersTrackDtoGrid.setItems(updateFav);
+            Grid<UsersTrackDto> usersTrackDtoGrid = new Grid<>();
+            usersTrackDtoGrid.addColumn(UsersTrackDto::getTitle).setHeader("Title").setTextAlign(ColumnTextAlign.CENTER);
+            usersTrackDtoGrid.addColumn(UsersTrackDto::getArtistName).setHeader("Artist").setTextAlign(ColumnTextAlign.CENTER);
+            usersTrackDtoGrid.addColumn(UsersTrackDto::getCount).setHeader("Count").setTextAlign(ColumnTextAlign.CENTER).setSortProperty("count");
+            usersTrackDtoGrid.addColumn(UsersTrackDto::isFavouriteStatus).setHeader("Favourite status");
+            usersTrackDtoGrid.addComponentColumn(item -> {
+                Button button = new Button("Change status");
+                button.addClickListener(click -> {
+                    usersTracksService.changeFavouriteStatus(123123, tracksService.getTrack(item.getTitle()).getId());
+                    List<UsersTrackDto> updateFav = usersTracksService.getUsersTracks(123123);
+                    usersTrackDtoGrid.setItems(updateFav);
+                });
+                button.setIcon(VaadinIcon.HEART.create());
+                return button;
             });
-            button.setIcon(VaadinIcon.HEART.create());
-            return button;
-        });
-        usersTrackDtoGrid.addComponentColumn(track -> {
-            Button button = new Button("Remove");
-            button.addClickListener(click -> {
-                usersTracksService.deleteTrack(123123, tracksService.getTrack(track.getTitle()).getId());
-                List<UsersTrackDto> update = usersTracksService.getUsersTracks(123123);
-                usersTrackDtoGrid.setItems(update);
+            usersTrackDtoGrid.addComponentColumn(track -> {
+                Button button = new Button("Remove");
+                button.addClickListener(click -> {
+                    usersTracksService.deleteTrack(123123, tracksService.getTrack(track.getTitle()).getId());
+                    List<UsersTrackDto> update = usersTracksService.getUsersTracks(123123);
+                    usersTrackDtoGrid.setItems(update);
+                });
+                button.setIcon(VaadinIcon.TRASH.create());
+                return button;
             });
-            button.setIcon(VaadinIcon.TRASH.create());
-            return button;
-        });
 
-        usersTrackDtoGrid.setItems(usersTrackDtos);
-        usersTrackDtoGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
-        usersTrackDtoGrid.getDataProvider();
-        add(usersTrackDtoGrid);
+            usersTrackDtoGrid.setItems(usersTrackDtos);
+            usersTrackDtoGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+            usersTrackDtoGrid.getDataProvider();
+            add(usersTrackDtoGrid);
+        } catch (Exception ignore) {
+        }
     }
 }
