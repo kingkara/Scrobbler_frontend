@@ -57,8 +57,10 @@ public class CreateUserView extends VerticalLayout {
             binder.validate();
             if (binder.isValid()) {
                 Notification.show("Zrejestrowano!");
-                usersService.saveUser(user);
-
+                try {
+                    usersService.saveUser(user);
+                } catch (Exception ignore) {
+                }
             } else {
                 Notification.show("Popraw dane");
             }
@@ -86,7 +88,7 @@ public class CreateUserView extends VerticalLayout {
         addFormItem(wrapper, formLayout, spotifyId, "Your spotify ID");
     }
 
-   public void createButtonLayout(VerticalLayout wrapper) {
+    public void createButtonLayout(VerticalLayout wrapper) {
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setWidthFull();
         buttonLayout

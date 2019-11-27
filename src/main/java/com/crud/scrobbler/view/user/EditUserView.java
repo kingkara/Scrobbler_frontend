@@ -52,16 +52,19 @@ public class EditUserView extends VerticalLayout {
         save.addClickListener(e -> {
             binder.validate();
             if (binder.isValid()) {
-                UserDto userDto = usersService.getUser(123123);
-                userDto.setUsername(user.getUsername());
-                userDto.setEmail(user.getEmail());
-                Notification.show("Dane zmieniono pomyślnie");
-                usersService.updateUser(userDto);
-
+                try {
+                    UserDto userDto = usersService.getUser(123123);
+                    userDto.setUsername(user.getUsername());
+                    userDto.setEmail(user.getEmail());
+                    Notification.show("Dane zmieniono pomyślnie");
+                    usersService.updateUser(userDto);
+                } catch (Exception ignore) {
+                }
             } else {
                 Notification.show("Popraw dane");
             }
         });
+
         add(wrapper);
     }
 
@@ -83,6 +86,7 @@ public class EditUserView extends VerticalLayout {
         wrapper.add(formLayout);
         field.getElement().getClassList().add("full-width");
     }
+
     public void createButtonLayout(VerticalLayout wrapper) {
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout
