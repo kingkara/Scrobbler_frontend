@@ -18,7 +18,10 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.ResourceAccessException;
 
 @Route(value = "editUser", layout = MainView.class)
 @PageTitle("Editing User")
@@ -28,6 +31,8 @@ public class EditUserView extends VerticalLayout {
 
     private Button cancel = new Button("Cancel");
     private Button save = new Button("Save");
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EditUserView.class);
 
     public EditUserView(@Autowired UsersService usersService) {
         VerticalLayout wrapper = new VerticalLayout();
@@ -58,7 +63,8 @@ public class EditUserView extends VerticalLayout {
                     userDto.setEmail(user.getEmail());
                     Notification.show("Dane zmieniono pomyślnie");
                     usersService.updateUser(userDto);
-                } catch (Exception ignore) {
+                } catch (ResourceAccessException ex) {
+                    LOGGER.warn("No user to edit data.");
                 }
             } else {
                 Notification.show("Popraw dane");

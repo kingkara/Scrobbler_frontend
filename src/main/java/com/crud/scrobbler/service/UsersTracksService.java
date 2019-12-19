@@ -39,5 +39,4 @@ public class UsersTracksService {
     public void deleteTrack(final long userId, final long trackId) {
         restTemplate.delete("http://localhost:8088/v1/usersTracks/" + userId + "/" + trackId);
     }
-
 }

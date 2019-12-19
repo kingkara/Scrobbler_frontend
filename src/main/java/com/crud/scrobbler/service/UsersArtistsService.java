@@ -33,6 +33,6 @@ public class UsersArtistsService {
     }
 
     public void deleteUsersArtist(final long artistId, final long userId) {
-        restTemplate.getForObject("http://localhost:8088/v1/usersArtists/" + artistId + "/" + userId, UsersArtistDto[].class);
+        restTemplate.delete("http://localhost:8088/v1/usersArtists/" + artistId + "/" + userId, UsersArtistDto[].class);
     }
 }
